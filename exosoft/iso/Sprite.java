@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public abstract class Sprite {
+public abstract class Sprite extends Environment {
 	BufferedImage spriteSheet = null;
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;
@@ -43,6 +43,10 @@ public abstract class Sprite {
 		default:
 			break;
 		}
+	}
+	
+	public Sprite() {
+		
 	}
 	
 	public BufferedImage getSprite(int index) {

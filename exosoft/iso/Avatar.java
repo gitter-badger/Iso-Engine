@@ -11,14 +11,22 @@ public class Avatar extends Sprite implements ObjectPhysics, Controllable  {
 	}
 
 	public void collision() {
-		// TODO Add collision logic you lazy fuck
+		if (checkCollision(bounds)) {
+			
+		}
 	}
 
 	public void physics() {
 		setyPosition(getyPosition() + getyVelocity());
-		setyVelocity(getyVelocity() + 1);
+		setyVelocity(getyVelocity() + gravity);
+	}
+	
+	@Override
+	public void visual() {
+		
 	}
 
+	@Override
 	public void movement() {
 		// TODO Auto-generated method stub
 	}
@@ -43,12 +51,6 @@ public class Avatar extends Sprite implements ObjectPhysics, Controllable  {
 
 	@Override
 	public void moveDown(double multiplier) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visual() {
 		// TODO Auto-generated method stub
 		
 	}

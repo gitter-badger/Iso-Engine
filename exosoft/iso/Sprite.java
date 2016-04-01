@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public abstract class Sprite {
+public abstract class Sprite extends Environment {
 	BufferedImage spriteSheet = null;
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;
@@ -14,7 +14,8 @@ public abstract class Sprite {
 	private double xPosition;
 	private double yPosition;
 	private double yVelocity;
-	public int spriteNum;
+	final public double gravity = 0.01;
+	private int spriteNum;
 	
 	public enum SheetType {
 		SINGLE,
@@ -52,6 +53,8 @@ public abstract class Sprite {
 		
 	}
 	
+	public abstract void visual();
+	
 	public BufferedImage getSprite(int index) {
 		return sprites[index];
 	}
@@ -88,8 +91,11 @@ public abstract class Sprite {
 		this.yVelocity = yVelocity;
 	}
 
-	public void visual() {
-		// TODO Literally just a required supertype
+	public int getSpriteNum() {
+		return spriteNum;
 	}
-	
+
+	public void setSpriteNum(int spriteNum) {
+		this.spriteNum = spriteNum;
+	}	
 }

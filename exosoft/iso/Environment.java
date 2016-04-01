@@ -9,12 +9,23 @@ public class Environment {
 	public void addShape(Rectangle r) {
 		objects.add(r);
 	}
-	public Rectangle[] getObjects() {
-		Rectangle[] objects = new Rectangle[this.objects.size()];
-		for (int index = 0; index < objects.length; index++) {
-			objects[index] = this.objects.get(index);
+	public boolean checkCollision(Rectangle bounds) {
+		for (Rectangle object : objects) {
+			if (bounds.intersects(object)) {
+				return true;
+			}
 		}
-		return objects;
+		return false;
+		
+	}
+	public Rectangle[] getObjects() {
+		Rectangle[] objectArray = new Rectangle[this.objects.size()];
+		int index = 0;
+		for (Rectangle object : objects) {
+			objectArray[index] = object;
+			index++;
+		}
+		return objectArray;
 	}
 	enum objectType {
 		

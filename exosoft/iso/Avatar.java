@@ -3,61 +3,53 @@ package exosoft.iso;
 import java.awt.Rectangle;
 import exosoft.iso.Sprite;
 
-public class Avatar extends Sprite implements ObjPhys {
+public class Avatar extends Sprite implements ObjectPhysics, Controllable  {
 	Rectangle bounds;
-	private double xPos = 60;
-	private double yPos = 60;
-	private double yVel = 0;
 
 	public Avatar(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
 		super(type, sheetPath, spriteWidth, spriteHeight);
 	}
 
-	public int getxPos() {
-		return (int) Math.round(xPos);
-	}
-
-	public void setxPos(double xPos) {
-		this.xPos = xPos;
-	}
-
-	public int getyPos() {
-		return (int) Math.round(yPos);
-	}
-
-	public void setyPos(double yPos) {
-		this.yPos = yPos;
-	}
-
-	public double getyVel() {
-		return yVel;
-	}
-
-	public void setyVel(double yVel) {
-		this.yVel = yVel;
-	}
-
-	public int getSpriteNum() {
-		return spriteNum;
-	}
-
-	public void setSpriteNum(int spriteNum) {
-		this.spriteNum = spriteNum;
-	}
-
-	public synchronized void visualLogic() {
-		// TODO Add visual logic you lazy fuck
-	}
-
-	@Override
-	public void collisionLogic() {
+	public void collision() {
 		// TODO Add collision logic you lazy fuck
 	}
 
+	public void physics() {
+		setyPosition(getyPosition() + getyVelocity());
+		setyVelocity(getyVelocity() + 1);
+	}
+
+	public void movement() {
+		// TODO Auto-generated method stub
+	}
+
 	@Override
-	public void ambientForces() {
-		setyPos(getyPos() + yVel);
-		setyVel(getyVel() + 1);
+	public void moveLeft(double multiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveRight(double multiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveUp(double multiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDown(double multiplier) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visual() {
+		// TODO Auto-generated method stub
+		
 	}
 }
-

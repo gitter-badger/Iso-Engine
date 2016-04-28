@@ -1,27 +1,37 @@
 package exosoft.iso;
 
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Environment {
-	List<Rectangle> objects = new ArrayList<Rectangle>();
-	public void addShape(Rectangle r) {
-		objects.add(r);
+	List<Shape> objects = new ArrayList<Shape>();
+	public void addShape(Shape s) {
+		objects.add(s);
 	}
 	public boolean checkCollision(Rectangle bounds) {
-		for (Rectangle object : objects) {
-			if (bounds.intersects(object)) {
+		for (Shape object : objects) {
+			if (object.intersects(bounds)) {
 				return true;
 			}
 		}
 		return false;
-		
 	}
-	public Rectangle[] getObjects() {
-		Rectangle[] objectArray = new Rectangle[this.objects.size()];
+	
+	public Rectangle intersection(Rectangle bounds) {
+		for (Shape object : objects) {
+			if (object.getBounds().intersects(bounds)) {
+				return bounds.intersection(object.getBounds());
+			}
+		}
+		return null;
+	}
+	
+	public Shape[] getObjects() {
+		Shape[] objectArray = new Shape[this.objects.size()];
 		int index = 0;
-		for (Rectangle object : objects) {
+		for (Shape object : objects) {
 			objectArray[index] = object;
 			index++;
 		}

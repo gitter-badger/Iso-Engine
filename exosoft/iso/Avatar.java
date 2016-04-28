@@ -1,18 +1,25 @@
 package exosoft.iso;
 
 import java.awt.Rectangle;
-import exosoft.iso.Sprite;
 
 public class Avatar extends Sprite implements ObjectPhysics, Controllable  {
-	Rectangle bounds;
-
+	
 	public Avatar(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
 		super(type, sheetPath, spriteWidth, spriteHeight);
+		bounds = new Rectangle((int) getxPosition(), (int) getyPosition(), spriteWidth, spriteHeight);
 	}
 
 	public void collision() {
-		if (checkCollision(bounds)) {
-			
+		getBounds().setLocation(getIntxPosition(), getIntyPosition());
+		if (location.checkCollision(getBounds())) {
+			setyVelocity(0);
+			Rectangle intersect = location.intersection(getBounds());
+			if (bounds.getX() < intersect.getX() && intersect.intersects(bounds)) {
+				setxPosition(getxPosition() - 1);
+			}
+			if (bounds.getX() > intersect.getX() && bounds.getMaxX() < intersect.getMaxX()) {
+				
+			}
 		}
 	}
 

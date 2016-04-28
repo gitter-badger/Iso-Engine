@@ -1,5 +1,6 @@
 package exosoft.iso;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,25 +12,29 @@ public abstract class Sprite extends Environment {
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;
 	public int spriteHeight = 0;
-	private double xPosition;
-	private double yPosition;
+	protected double xPosition;
+	protected double yPosition;
 	private double yVelocity;
 	final public double gravity = 0.01;
 	private int spriteNum;
-	
+	protected Rectangle bounds;
+	Environment location;
+
 	public enum SheetType {
-		SINGLE,
-		HORIZONTAL,
-		VERTICAL,
-		RECTANGULAR
+		SINGLE, HORIZONTAL, VERTICAL, RECTANGULAR
 	}
+
+	
+
 	public Sprite(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
+		this.spriteHeight = spriteHeight;
+		this.spriteWidth = spriteWidth;
 		try {
 			spriteSheet = ImageIO.read(new File(sheetPath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		switch(type) {
+		switch (type) {
 		case HORIZONTAL:
 			sprites = new BufferedImage[spriteSheet.getWidth() / spriteWidth];
 			for (int i = 0; i < spriteSheet.getWidth() / spriteWidth; i++) {
@@ -48,12 +53,24 @@ public abstract class Sprite extends Environment {
 			break;
 		}
 	}
-	
+
 	public Sprite() {
-		
+
+	}
+
+	public void spawn(Environment location) {
+		this.location = location;
 	}
 	
 	public abstract void visual();
+
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
 	
 	public BufferedImage getSprite(int index) {
 		return sprites[index];
@@ -62,7 +79,7 @@ public abstract class Sprite extends Environment {
 	public double getxPosition() {
 		return xPosition;
 	}
-	
+
 	public int getIntxPosition() {
 		return (int) xPosition;
 	}
@@ -74,7 +91,7 @@ public abstract class Sprite extends Environment {
 	public double getyPosition() {
 		return yPosition;
 	}
-	
+
 	public int getIntyPosition() {
 		return (int) yPosition;
 	}
@@ -97,5 +114,5 @@ public abstract class Sprite extends Environment {
 
 	public void setSpriteNum(int spriteNum) {
 		this.spriteNum = spriteNum;
-	}	
+	}
 }

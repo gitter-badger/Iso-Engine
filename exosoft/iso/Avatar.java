@@ -9,10 +9,11 @@ public class Avatar extends Sprite implements ObjectPhysics, Controllable {
 		bounds = new Rectangle((int) getIntxPosition(), getIntyPosition(), spriteWidth, spriteHeight);
 	}
 
-	public void collision() {
-		double nextyPosition = getyPosition() + gravity;
+	public synchronized void collision() {
+		double nextyPosition = Math.round(getyPosition() + getyVelocity());
 		Rectangle newBounds = getBounds();
 		newBounds.setLocation(getIntxPosition(), (int) nextyPosition);
+		newBounds.grow(1, 1);
 		if (location.checkCollision(newBounds)) {
 			Rectangle intersect = location.intersection(newBounds);
 			try {
@@ -21,21 +22,21 @@ public class Avatar extends Sprite implements ObjectPhysics, Controllable {
 						setxPosition(getIntxPosition() - 1);
 					}
 					if (newBounds.getMaxY() > intersect.getMinY()) {
-						nextyPosition--;
+						nextyPosition-= 0.01;
 						newBounds.setLocation(getIntxPosition(), (int) nextyPosition);
 					}
 					intersect = location.intersection(newBounds);
 				}
+				setyPosition((int) nextyPosition);
+				setyVelocity(0);
 			} catch (NullPointerException e) {
-
+				System.err.println("Collision had some sort of nullpointerexception but it's fine i swear");
 			}
 		}
-
-		setyPosition(nextyPosition);
 		bounds.setLocation(getIntxPosition(), getIntyPosition());
 	}
 
-	public void physics() {
+	public synchronized void physics() {
 		setyPosition(getyPosition() + getyVelocity());
 		setyVelocity(getyVelocity() + gravity);
 	}

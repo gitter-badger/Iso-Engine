@@ -2,27 +2,29 @@ package exosoft.iso;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Environment {
 	List<Shape> objects = new ArrayList<Shape>();
+	public double gravity = 0.2;
 	public void addShape(Shape s) {
 		objects.add(s);
 	}
-	public boolean checkCollision(Rectangle bounds) {
+	public boolean checkCollision(Rectangle2D newBounds) {
 		for (Shape object : objects) {
-			if (object.intersects(bounds)) {
+			if (object.intersects(newBounds)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public Rectangle intersection(Rectangle bounds) {
+	public Rectangle2D intersection(Rectangle2D bounds) {
 		for (Shape object : objects) {
 			if (object.getBounds().intersects(bounds)) {
-				return bounds.intersection(object.getBounds());
+				return bounds.createIntersection(object.getBounds());
 			}
 		}
 		return new Rectangle();

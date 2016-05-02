@@ -1,77 +1,55 @@
 package exosoft.iso;
 
-import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
-public class Avatar extends Sprite implements ObjectPhysics, Controllable {
+public class Avatar extends Sprite implements ObjectPhysics {
+	protected boolean atRest = false;
 
 	public Avatar(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
 		super(type, sheetPath, spriteWidth, spriteHeight);
-		bounds = new Rectangle((int) getIntxPosition(), getIntyPosition(), spriteWidth, spriteHeight);
+		bounds = new Rectangle2D.Double(getX(), getY(), spriteWidth, spriteHeight);
 	}
 
 	public synchronized void collision() {
-		double nextyPosition = Math.round(getyPosition() + getyVelocity());
-		Rectangle newBounds = getBounds();
-		newBounds.setLocation(getIntxPosition(), (int) nextyPosition);
-		newBounds.grow(1, 1);
+		double nextyPosition = Math.round(getY() + getVelocity());
+		Rectangle2D newBounds = getBounds2D();
+		newBounds.setRect(getX(), nextyPosition, spriteWidth, spriteHeight);
 		if (location.checkCollision(newBounds)) {
-			Rectangle intersect = location.intersection(newBounds);
+			Rectangle2D intersect = location.intersection(newBounds);
 			try {
 				while (!intersect.isEmpty()) {
 					if (newBounds.getMinX() < intersect.getMinX()) {
-						setxPosition(getIntxPosition() - 1);
+						setX(getX() - 1);
 					}
 					if (newBounds.getMaxY() > intersect.getMinY()) {
-						nextyPosition-= 0.01;
-						newBounds.setLocation(getIntxPosition(), (int) nextyPosition);
+						nextyPosition -= gravity;
+						newBounds.setRect(getX(), nextyPosition, spriteWidth, spriteHeight);
+						atRest = true;
 					}
 					intersect = location.intersection(newBounds);
 				}
-				setyPosition((int) nextyPosition);
-				setyVelocity(0);
+				setY(nextyPosition);
+				if (atRest && getVelocity() > 2) {
+					setVelocity(-getVelocity() / 2);
+				} else {
+					setVelocity(0);
+				}
 			} catch (NullPointerException e) {
 				System.err.println("Collision had some sort of nullpointerexception but it's fine i swear");
 			}
+		} else {
+			atRest = false;
 		}
-		bounds.setLocation(getIntxPosition(), getIntyPosition());
+		bounds.setRect(getX(), getY(), spriteWidth, spriteHeight);
 	}
 
 	public synchronized void physics() {
-		setyPosition(getyPosition() + getyVelocity());
-		setyVelocity(getyVelocity() + gravity);
+		setY(getY() + getVelocity());
+		setVelocity(getVelocity() + gravity);
 	}
 
 	@Override
 	public void visual() {
-
-	}
-
-	@Override
-	public void movement() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void moveLeft(double multiplier) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void moveRight(double multiplier) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void moveUp(double multiplier) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void moveDown(double multiplier) {
-		// TODO Auto-generated method stub
 
 	}
 }

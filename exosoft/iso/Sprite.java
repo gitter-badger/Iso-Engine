@@ -93,7 +93,7 @@ public abstract class Sprite extends Environment {
 	}
 
 	public int getIntyPosition() {
-		return (int) yPosition;
+		return (int) Math.round(yPosition);
 	}
 
 	public void setyPosition(double yPosition) {

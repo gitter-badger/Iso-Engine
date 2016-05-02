@@ -25,7 +25,7 @@ public class Environment {
 				return bounds.intersection(object.getBounds());
 			}
 		}
-		return null;
+		return new Rectangle();
 	}
 	
 	public Shape[] getObjects() {

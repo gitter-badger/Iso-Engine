@@ -8,13 +8,24 @@ import java.util.List;
 
 public class Environment {
 	List<Shape> objects = new ArrayList<Shape>();
+	List<Character> entities = new ArrayList<Character>();
 	public double gravity = 0.2;
-	public void addShape(Shape s) {
+	
+	public void spawnEntity(Character c) {
+	    entities.add(c);
+	}
+	
+	public void addObject(Shape s) {
 		objects.add(s);
 	}
-	public boolean checkCollision(Rectangle2D newBounds) {
+	
+	public void createObject(double x, double y, double w, double h) {
+	    objects.add(new Rectangle2D.Double(x, y, w, h)));
+	}
+	
+	public boolean checkCollision(Rectangle2D bounds) {
 		for (Shape object : objects) {
-			if (object.intersects(newBounds)) {
+			if (object.intersects(bounds)) {
 				return true;
 			}
 		}
@@ -27,7 +38,7 @@ public class Environment {
 				return bounds.createIntersection(object.getBounds());
 			}
 		}
-		return new Rectangle();
+		return new Rectangle2D.Double();
 	}
 	
 	public Shape[] getObjects() {
@@ -39,10 +50,22 @@ public class Environment {
 		}
 		return objectArray;
 	}
-	enum objectType {
-		
+	
+	public Character[] getEntities() {
+	    Character[] entityArray = new Character[this.entities.size()];
+	    int index = 0;
+	    for (Character entity : entities) {
+	        entityArray[index] = object;
+	        index++;
+	    }
+	    return entityArray;
 	}
-	class Object {
+	
+	enum objectType {
+		INTERACTIVE, DYNAMIC, STATIC
+	}
+	
+	class Object extends Shape {
 		
 	}
 }

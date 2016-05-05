@@ -14,12 +14,7 @@ public abstract class Sprite extends Environment {
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;
 	public int spriteHeight = 0;
-	protected double x;
-	protected double y;
-	protected double velocity;
 	private int spriteNum;
-	protected Rectangle2D bounds;
-	Environment location;
 
 	public enum SheetType {
 		SINGLE, HORIZONTAL, VERTICAL, RECTANGULAR
@@ -34,6 +29,9 @@ public abstract class Sprite extends Environment {
 			e.printStackTrace();
 		}
 		switch (type) {
+		case SINGLE:
+		    sprites = spriteSheet;
+		    break;
 		case HORIZONTAL:
 			sprites = new BufferedImage[spriteSheet.getWidth() / spriteWidth];
 			for (int i = 0; i < spriteSheet.getWidth() / spriteWidth; i++) {
@@ -56,57 +54,12 @@ public abstract class Sprite extends Environment {
 	public Sprite() {
 
 	}
-
-	public void spawn(Environment location) {
-		this.location = location;
-	}
-	
-	public abstract void visual();
-
-	public Rectangle2D getBounds2D() {
-		return bounds;
-	}
-
-	public void setBounds(Rectangle bounds) {
-		this.bounds = bounds;
-	}
 	
 	public BufferedImage getSprite(int index) {
 		return sprites[index];
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public int getIntX() {
-		return (int) x;
-	}
-
-	public void setX(double xPosition) {
-		this.x = xPosition;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public int getIntY() {
-		return (int) Math.round(y);
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double getVelocity() {
-		return velocity;
-	}
-
-	public void setVelocity(double yVelocity) {
-		this.velocity = yVelocity;
-	}
-
+	
 	public int getSpriteNum() {
 		return spriteNum;
 	}

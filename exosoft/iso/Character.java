@@ -22,48 +22,49 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 
     //Detects and compensates for collision
 	public synchronized void collision() {
-		double nextyPosition = Math.round(getY() + getVelocity());
-		Rectangle2D newBounds = getBounds2D();
-		newBounds.setRect(getX(), nextyPosition, spriteWidth, spriteHeight);
+	    double x = getX();
+		double y = getY() + velocity;
+		Rectangle2D newBounds = getBounds();
+		newBounds.setRect(getX(), y, spriteWidth, spriteHeight);
 		if (location.checkCollision(newBounds)) {
 			Rectangle2D intersect = location.intersection(newBounds);
 			try {
 				while (!intersect.isEmpty()) {
 					if (newBounds.getMinX() < intersect.getMinX()) {
-						setX(getX() - 1);
+						x -= 1;
 					}
 					if (newBounds.getMaxY() > intersect.getMinY()) {
-						nextyPosition -= gravity;
-						newBounds.setRect(getX(), nextyPosition, spriteWidth, spriteHeight);
+						y -= gravity;
+						newBounds.setRect(x, y, spriteWidth, spriteHeight);
 						atRest = true;
 					}
 					intersect = location.intersection(newBounds);
 				}
-				setY(nextyPosition);
-				if (atRest && getVelocity() > 2) {
-					setVelocity(-getVelocity() / 2);
+				setLocation(x, y);
+				if (atRest && velocity > 2) {
+					setVelocity(-velocity / 2);
 				} else {
 					setVelocity(0);
 				}
 			} catch (NullPointerException e) {
-				System.err.println("Collision had some sort of nullpointerexception but it's fine i swear");
+				System.err.println("Collision had some sort of nullpointerexception but it's fine");
 			}
 		} else {
 			atRest = false;
 		}
-		bounds.setRect(getX(), getY(), spriteWidth, spriteHeight);
+		bounds.setRect(x, y, spriteWidth, spriteHeight);
 	}
 
     // Inherited function that runs the physics of the environment
 	public synchronized void physics() {
-		setY(getY() + getVelocity());
-		setVelocity(getVelocity() + gravity);
+		setY(getY() + velocity);
+		setVelocity(velocity + gravity);
 	}
 
     // Visual logic to be handled by subclass
 	public abstract void visual();
 
-	public Rectangle2D getBounds2D() {
+	public Rectangle2D getBounds() {
 		return bounds;
 	}
 

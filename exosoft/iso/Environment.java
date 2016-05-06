@@ -6,9 +6,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/** The game world consists of objects (such as floors, 
+* platforms and walls) and entities (such as the 
+* player).
+*/
 public class Environment {
 	List<Shape> objects = new ArrayList<Shape>();
-	List<Character> entities = new ArrayList<Character>();
+	List<Entity> entities = new ArrayList<Entities>();
 	public double gravity = 0.2;
 	
 	public void spawnEntity(Character c) {

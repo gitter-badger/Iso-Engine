@@ -9,7 +9,7 @@ import exosoft.iso.Environment;
 
 import javax.imageio.ImageIO;
 
-public abstract class Sprite extends Environment {
+public abstract class Sprite {
 	BufferedImage spriteSheet = null;
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;

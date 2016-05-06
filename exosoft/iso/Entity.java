@@ -11,8 +11,10 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
     protected double x;
     protected double y;
     public double velocity;
+    protected double gravity;
     protected Rectangle2D bounds;
     protected boolean atRest = false;
+    public Environment location;
 
     // Declares a new Entity
 	public Entity(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
@@ -20,6 +22,11 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		bounds = new Rectangle2D.Double(getX(), getY(), spriteWidth, spriteHeight);
 	}
 
+	public void spawn(Environment location) {
+		this.location = location;
+		this.gravity = location.gravity;
+	}
+	
     //Detects and compensates for collision
 	public synchronized void collision() {
 	    double x = getX();
@@ -34,7 +41,7 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 						x -= 1;
 					}
 					if (newBounds.getMaxY() > intersect.getMinY()) {
-						y -= gravity;
+						y -= location.gravity;
 						newBounds.setRect(x, y, spriteWidth, spriteHeight);
 						atRest = true;
 					}
@@ -68,7 +75,7 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		return bounds;
 	}
 
-	public void setBounds(Rectangle bounds) {
+	public void setBounds(Rectangle2D bounds) {
 		this.bounds = bounds;
 	}
 	

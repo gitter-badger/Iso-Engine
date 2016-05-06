@@ -1,10 +1,12 @@
 package exosoft.iso;
 
-import java.awt.Rectangle;
+import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import exosoft.iso.Entity;
 
 /** The game world consists of objects (such as floors, 
 * platforms and walls) and entities (such as the 
@@ -12,11 +14,12 @@ import java.util.List;
 */
 public class Environment {
 	List<Shape> objects = new ArrayList<Shape>();
-	List<Entity> entities = new ArrayList<Entities>();
+	List<Entity> entities = new ArrayList<Entity>();
 	public double gravity = 0.2;
 	
-	public void spawnEntity(Character c) {
-	    entities.add(c);
+	public void spawnEntity(Entity e) {
+		e.spawn(this);
+	    entities.add(e);
 	}
 	
 	public void addObject(Shape s) {
@@ -24,7 +27,7 @@ public class Environment {
 	}
 	
 	public void createObject(double x, double y, double w, double h) {
-	    objects.add(new Rectangle2D.Double(x, y, w, h)));
+	    objects.add(new Rectangle2D.Double(x, y, w, h));
 	}
 	
 	public boolean checkCollision(Rectangle2D bounds) {
@@ -55,11 +58,11 @@ public class Environment {
 		return objectArray;
 	}
 	
-	public Character[] getEntities() {
-	    Character[] entityArray = new Character[this.entities.size()];
+	public Entity[] getEntities() {
+	    Entity[] entityArray = new Entity[this.entities.size()];
 	    int index = 0;
-	    for (Character entity : entities) {
-	        entityArray[index] = object;
+	    for (Entity entity : entities) {
+	        entityArray[index] = entity;
 	        index++;
 	    }
 	    return entityArray;
@@ -69,7 +72,8 @@ public class Environment {
 		INTERACTIVE, DYNAMIC, STATIC
 	}
 	
-	class Object extends Shape {
+	@SuppressWarnings("serial")
+	class Object extends Polygon {
 		
 	}
 }

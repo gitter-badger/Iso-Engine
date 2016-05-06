@@ -1,12 +1,8 @@
 package exosoft.iso;
 
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import exosoft.iso.Environment;
-
 import javax.imageio.ImageIO;
 
 public abstract class Sprite {
@@ -30,7 +26,8 @@ public abstract class Sprite {
 		}
 		switch (type) {
 		case SINGLE:
-		    sprites = spriteSheet;
+		    sprites = new BufferedImage[1];
+		    sprites[0] = spriteSheet;
 		    break;
 		case HORIZONTAL:
 			sprites = new BufferedImage[spriteSheet.getWidth() / spriteWidth];

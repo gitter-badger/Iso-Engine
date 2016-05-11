@@ -27,49 +27,48 @@ import exosoft.iso.Entity;
  * entities (such as the player).
  */
 public class Environment {
-	List<Shape> objects = new ArrayList<Shape>();
+	List<Object> objects = new ArrayList<Object>();
 	List<Entity> entities = new ArrayList<Entity>();
 	public double gravity = 0.2;
 
 	public void spawnEntity(Entity e) {
-		e.spawn(this);
 		entities.add(e);
 	}
 
-	public void addObject(Shape s) {
-		objects.add(s);
+	public void addObject(Object o) {
+		objects.add(o);
 	}
 
-	public void createObject(double x, double y, double w, double h) {
-		objects.add(new Rectangle2D.Double(x, y, w, h));
+	public void createObject(BufferedImage texture, Point... vertices) {
+		objects.add(new Object(texture, vertices));
 	}
 
-	public boolean checkCollision(Rectangle2D bounds) {
-		for (Shape object : objects) {
-			if (object.intersects(bounds)) {
-				return true;
+
+    public void execute() {
+        for (Shape object : objects) {
+            for (Entity entity : entities) {
+			    if (entity.getBounds().intersects(object.getBounds())) {
+				    entity.collide(object.getBounds());
+				}
 			}
 		}
-		return false;
 	}
 
-	public Rectangle2D intersection(Rectangle2D bounds) {
-		for (Shape object : objects) {
-			if (object.getBounds().intersects(bounds)) {
-				return bounds.createIntersection(object.getBounds());
-			}
-		}
-		return new Rectangle2D.Double();
-	}
-
-	public Shape[] getObjects() {
-		Shape[] objectArray = new Shape[this.objects.size()];
+	public Object[] getObjects() {
+		Object[] objectArray = new Object[this.objects.size()];
 		int index = 0;
-		for (Shape object : objects) {
+		for (Object object : objects) {
 			objectArray[index] = object;
 			index++;
 		}
 		return objectArray;
+	}
+	
+	public Graphics2D drawObjects(Graphics2D g) {
+	    for (Object object : objects) {
+	        g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
+	    }
+	    return g;
 	}
 
 	public Entity[] getEntities() {
@@ -82,7 +81,7 @@ public class Environment {
 		return entityArray;
 	}
 
-	enum objectType {
+	public enum objectType {
 		INTERACTIVE, DYNAMIC, STATIC
 	}
 
@@ -108,12 +107,11 @@ public class Environment {
 	        // clear the clip
 	        g.setClip(null);
 	        // draw the shape as an outline
-	        g.setColor(Color.RED);
+	        g.setColor(Color.BLACK);
 	        g.setStroke(new BasicStroke(1f));
 	        g.draw(this);
 	        // dispose of any graphics object we explicitly create
 	        g.dispose();
-
 	        return tmp;
 	    }
 		public Object(Point... vertices) {

@@ -14,7 +14,6 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 	public double velocity;
 	protected double gravity;
 	protected Rectangle2D bounds;
-	public Environment location;
 
 	// Declares a new Entity
 	public Entity(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
@@ -22,60 +21,39 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		bounds = new Rectangle2D.Double(getX(), getY(), spriteWidth, spriteHeight);
 	}
 
-	public void spawn(Environment location) {
-		this.location = location;
-		this.gravity = location.gravity;
-	}
-
-	// Detects and compensates for collision
-	public synchronized void collision() {
+	// Compensates for collision
+	public synchronized void collide(Rectangle2D intersect) {
 		atRest = false;
 		double x = getX();
 		double y = getY() + velocity;
-		Rectangle2D newBounds = getBounds();
-		newBounds.setRect(x, y, spriteWidth, spriteHeight);
-		if (location.checkCollision(newBounds)) {
-			Rectangle2D intersect = location.intersection(newBounds);
-			try {
-				while (!intersect.isEmpty() && (intersect.getHeight() >= 1 || intersect.getWidth() >= 1)) {
-					// if (newBounds.getMaxX() < intersect.getMaxX()) {
-					// x -= 1;
-					// }
-					// if (newBounds.getMaxY() > intersect.getMinY()) {
-					// y -= location.gravity;
-					// newBounds.setRect(x, y, spriteWidth, spriteHeight);
-					// atRest = true;
-					// }
-					if (intersect.getHeight() > intersect.getWidth()) {
-						if (intersect.getCenterX() < newBounds.getCenterX()) {
-							x += 0.001;
-						} else if (intersect.getCenterX() > newBounds.getCenterX()) {
-							x -= 0.001;
-						}
-					}
-					if (intersect.getWidth() > intersect.getHeight()) {
-						if (intersect.getCenterY() < newBounds.getCenterY()) {
-							y += 0.001;
-						} else if (intersect.getCenterY() > newBounds.getCenterY()) {
-							y -= 0.001;
-						}
-					}
-					if (intersect.getMaxY() == newBounds.getMaxY() && intersect.getWidth() >= 5) {
-						atRest = true;
-					}
-					newBounds.setRect(x, y, spriteWidth, spriteHeight);
-					intersect = location.intersection(newBounds);
+		Rectangle2D newBounds = getBounds().setRect(x, y, spriteWidth, spriteHeight);
+		while (!intersect.isEmpty() && (intersect.getHeight() >= 1 || intersect.getWidth() >= 1)) {
+			if (intersect.getHeight() > intersect.getWidth()) {
+				if (intersect.getCenterX() < newBounds.getCenterX()) {
+					x += 0.001;
+				} else if (intersect.getCenterX() > newBounds.getCenterX()) {
+					x -= 0.001;
 				}
-				setLocation(x, y);
-				if (atRest) {
-					if (velocity > 8) {
-						setVelocity(-velocity / 2);
-					} else {
-						setVelocity(0);
-					}
+			}
+			if (intersect.getWidth() > intersect.getHeight()) {
+				if (intersect.getCenterY() < newBounds.getCenterY()) {
+					y += 0.001;
+				} else if (intersect.getCenterY() > newBounds.getCenterY()) {
+					y -= 0.001;
 				}
-			} catch (NullPointerException e) {
-				System.err.println("Collision had some sort of nullpointerexception but it's fine");
+			}
+			if (intersect.getMaxY() == newBounds.getMaxY() && intersect.getWidth() >= 5) {
+				atRest = true;
+			}
+			newBounds.setRect(x, y, spriteWidth, spriteHeight);
+			intersect = intersect.createIntersection(newBounds);
+		}
+		setLocation(x, y);
+		if (atRest) {
+			if (velocity > 8) {
+				setVelocity(-velocity / 2);
+			} else {
+				setVelocity(0);
 			}
 		}
 		bounds.setRect(x, y, spriteWidth, spriteHeight);

@@ -1,5 +1,7 @@
 package exosoft.iso;
 
+import java.awt.Point;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -26,7 +28,8 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		atRest = false;
 		double x = getX();
 		double y = getY() + velocity;
-		Rectangle2D newBounds = getBounds().setRect(x, y, spriteWidth, spriteHeight);
+		Rectangle2D newBounds = getBounds();
+		newBounds.setRect(x, y, spriteWidth, spriteHeight);
 		while (!intersect.isEmpty() && (intersect.getHeight() >= 1 || intersect.getWidth() >= 1)) {
 			if (intersect.getHeight() > intersect.getWidth()) {
 				if (intersect.getCenterX() < newBounds.getCenterX()) {
@@ -57,6 +60,16 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 			}
 		}
 		bounds.setRect(x, y, spriteWidth, spriteHeight);
+	}
+	
+	public void collide2D(Object o) {
+		Line2D[] sides = new Line2D[o.npoints];
+		int[] xpoints = o.xpoints;
+		int[] ypoints = o.ypoints;
+		for (int i = 0; i < sides.length - 1; i++) {
+			sides[i].setLine(xpoints[i], xpoints[i + 1], xpoints[i + 1], ypoints[i]);
+		}
+		sides[sides.length - 1].setLine(xpoints[sides.length - 1], ypoints[0], xpoints[0], ypoints[sides.length - 1]);
 	}
 
 	// Inherited function that runs the physics of the environment

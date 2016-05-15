@@ -26,9 +26,9 @@ public abstract class Sprite {
 		}
 		switch (type) {
 		case SINGLE:
-		    sprites = new BufferedImage[1];
-		    sprites[0] = spriteSheet;
-		    break;
+			sprites = new BufferedImage[1];
+			sprites[0] = spriteSheet;
+			break;
 		case HORIZONTAL:
 			sprites = new BufferedImage[spriteSheet.getWidth() / spriteWidth];
 			for (int i = 0; i < spriteSheet.getWidth() / spriteWidth; i++) {
@@ -51,12 +51,11 @@ public abstract class Sprite {
 	public Sprite() {
 
 	}
-	
+
 	public BufferedImage getSprite(int index) {
 		return sprites[index];
 	}
 
-	
 	public int getSpriteNum() {
 		return spriteNum;
 	}

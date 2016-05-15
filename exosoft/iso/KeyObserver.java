@@ -1,11 +1,11 @@
-package exosoft.util;
+package exosoft.iso;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public final class KeyObserver implements KeyListener {
-	
-	private static boolean[] keys = new boolean[512];
+public class KeyObserver implements KeyListener {
+
+	private static boolean[] keyStatus = new boolean[512];
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -21,13 +21,13 @@ public final class KeyObserver implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		setKey(e.getKeyCode(), false);
 	}
-	
+
 	public boolean getKey(int index) {
-		return keys[index];
+		return keyStatus[index];
 	}
 
 	public void setKey(int index, boolean status) {
-		keys[index] = status;
+		keyStatus[index] = status;
 	}
 
 }

@@ -19,9 +19,10 @@ public class Environment {
 	List<Entity> entities = new ArrayList<Entity>();
 	public double gravity = 0.2;
 
-	public void spawnEntity(Entity e) {
+	public void spawnEntity(Entity e, double x, double y) {
 		entities.add(e);
 		e.gravity = this.gravity;
+		e.setLocation(x, y);
 	}
 
 	public void addObject(Object o) {
@@ -32,12 +33,11 @@ public class Environment {
 		objects.add(new Object(texture, vertices));
 	}
 
-
-    public void execute() {
-        for (Shape object : objects) {
-            for (Entity entity : entities) {
-			    if (entity.getBounds().intersects(object.getBounds())) {
-				    entity.collide(object.getBounds());
+	public void execute() {
+		for (Shape object : objects) {
+			for (Entity entity : entities) {
+				if (entity.getBounds().intersects(object.getBounds())) {
+					entity.collide(object.getBounds());
 				}
 			}
 		}
@@ -52,12 +52,12 @@ public class Environment {
 		}
 		return objectArray;
 	}
-	
-	public Graphics2D drawObjects(Graphics2D g) {
-	    for (Object object : objects) {
-	        g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
-	    }
-	    return g;
+
+	public Graphics2D drawWorld(Graphics2D g) {
+		for (Object object : objects) {
+			g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
+		}
+		return g;
 	}
 
 	public Entity[] getEntities() {
@@ -68,9 +68,5 @@ public class Environment {
 			index++;
 		}
 		return entityArray;
-	}
-
-	public enum objectType {
-		INTERACTIVE, DYNAMIC, STATIC
 	}
 }

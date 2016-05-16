@@ -18,6 +18,7 @@ public class Environment {
 	List<Object> objects = new ArrayList<Object>();
 	List<Entity> entities = new ArrayList<Entity>();
 	public double gravity = 0.2;
+	private boolean devmode;
 
 	public void spawnEntity(Entity e, double x, double y) {
 		entities.add(e);
@@ -57,6 +58,9 @@ public class Environment {
 		for (Object object : objects) {
 			g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
 		}
+		for (Entity entity : entities) {
+			g.drawImage(entity.getSprite(entity.getSpriteNum()), entity.getIntX(), entity.getIntY(), null);
+		}
 		return g;
 	}
 
@@ -68,5 +72,13 @@ public class Environment {
 			index++;
 		}
 		return entityArray;
+	}
+
+	public boolean isDevmode() {
+		return devmode;
+	}
+
+	public void setDevmode(boolean devmode) {
+		this.devmode = devmode;
 	}
 }

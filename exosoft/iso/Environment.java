@@ -1,5 +1,6 @@
 package exosoft.iso;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
@@ -57,9 +58,17 @@ public class Environment {
 	public Graphics2D drawWorld(Graphics2D g) {
 		for (Object object : objects) {
 			g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
+			if (devmode) {
+				g.setColor(Color.blue);
+				g.draw(object.getBounds());
+			}
 		}
 		for (Entity entity : entities) {
 			g.drawImage(entity.getSprite(entity.getSpriteNum()), entity.getIntX(), entity.getIntY(), null);
+			if (devmode) {
+				g.setColor(Color.red);
+				g.draw(entity.getBounds());
+			}
 		}
 		return g;
 	}

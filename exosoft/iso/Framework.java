@@ -17,4 +17,31 @@ public class Framework {
 	protected static JTextField consoleInput;
 	protected static JPanel console;
 	protected static Window window;
+	protected static JPanel sheet;
+	
+	protected void InitiateGame() {
+		metaFrequency = 120;
+		gameFrequency = 120;
+		drawRate = 60;
+		keywatch = new KeyObserver();
+		gameWorld = new Environment();
+	}
+	
+	protected void InitiateWindow() {
+		window = new Window("Zerfall", 1280, 720);
+		window.setFocusable(true);
+		window.addKeyListener(keywatch = new KeyObserver());
+		window.add(sheet = new JPanel() {
+			@Override
+			public void paintComponent(Graphics g1) {
+				super.paintComponent(g1);
+				Graphics2D g = (Graphics2D) g1;
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g = gameWorld.drawWorld(g);
+			}
+		});
+		sheet.setLayout(new CardLayout());
+		sheet.setSize(1280, 720);
+		sheet.setVisible(true);
+	}
 }

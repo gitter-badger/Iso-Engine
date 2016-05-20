@@ -64,8 +64,6 @@ public class Framework {
 		
 		gameHandler = new Timer(1000 / gameFrequency, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				player.movement();
-				player.physics();
 				gameWorld.execute();
 			}
 		});
@@ -75,7 +73,6 @@ public class Framework {
 			
 			public void actionPerformed(ActionEvent e) {
 				calculateFramerate();
-				player.visual();
 				sheet.repaint();
 			}
 			

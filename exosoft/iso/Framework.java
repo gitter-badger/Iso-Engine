@@ -84,6 +84,10 @@ public class Framework {
 				logTime = System.nanoTime();
 			} 
 		});
+		
+		metaHandler.start();
+		gameHandler.start();
+		visualHandler.start();
 	}
 	
 	protected void initiateWindow() {

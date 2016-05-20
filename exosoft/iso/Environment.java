@@ -3,13 +3,10 @@ package exosoft.iso;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import exosoft.iso.Entity;
-import exosoft.iso.Object;
 
 /**
  * The game world consists of objects (such as floors, platforms and walls) and
@@ -20,6 +17,7 @@ public class Environment {
 	List<Entity> entities = new ArrayList<Entity>();
 	public double gravity = 0.2;
 	private boolean devmode;
+	private boolean antialiasmode;
 
 	public void spawnEntity(Entity e, double x, double y) {
 		entities.add(e);
@@ -66,6 +64,7 @@ public class Environment {
 	}
 
 	public Graphics2D drawWorld(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		for (Object object : objects) {
 			g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
 			if (devmode) {
@@ -99,5 +98,16 @@ public class Environment {
 
 	public void setDevmode(boolean devmode) {
 		this.devmode = devmode;
+	}
+
+	public boolean isAntialiasmode() {
+		return antialiasmode;
+	}
+
+	public void setAntialiasmode(boolean antialiasmode) {
+		this.antialiasmode = antialiasmode;
+		for (Object object : objects) {
+			object.setAntialiasmode(antialiasmode);
+		}
 	}
 }

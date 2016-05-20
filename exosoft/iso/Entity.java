@@ -1,6 +1,5 @@
 package exosoft.iso;
 
-import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
@@ -122,4 +121,6 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 	public void setVelocity(double velocity) {
 		this.velocity = velocity;
 	}
+
+	public abstract void movement();
 }

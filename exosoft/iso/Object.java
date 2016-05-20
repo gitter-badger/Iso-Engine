@@ -17,13 +17,13 @@ import javax.imageio.ImageIO;
 @SuppressWarnings("serial")
 public class Object extends Polygon {
 	public BufferedImage texture;
-	private boolean antialiasStatus;
+	private boolean antialiasmode;
 
 	public BufferedImage getTexturedObject() {
 		Rectangle r = this.getBounds();
 		BufferedImage tmp = new BufferedImage(r.width + 2, r.height + 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = tmp.createGraphics();
-		if (antialiasStatus) {
+		if (antialiasmode) {
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		AffineTransform centerTransform = AffineTransform.getTranslateInstance(-r.x + 1, -r.y + 1);
@@ -62,6 +62,14 @@ public class Object extends Polygon {
 			System.err.println("Error when setting texture of object " + this.toString());
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isAntialiasmode() {
+		return antialiasmode;
+	}
+
+	public void setAntialiasmode(boolean antialiasmode) {
+		this.antialiasmode = antialiasmode;
 	}
 
 	public enum objectType {

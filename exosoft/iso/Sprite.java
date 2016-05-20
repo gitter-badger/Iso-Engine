@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public abstract class Sprite {
 	BufferedImage spriteSheet = null;
-	private BufferedImage[] sprites;
+	protected BufferedImage[] sprites;
 	public int spriteWidth = 0;
 	public int spriteHeight = 0;
 	protected int spriteNum;

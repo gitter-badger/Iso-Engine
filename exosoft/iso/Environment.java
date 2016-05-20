@@ -36,13 +36,23 @@ public class Environment {
 	}
 
 	public void execute() {
-		for (Shape object : objects) {
-			for (Entity entity : entities) {
+		for (Entity entity : entities) {
+			entity.movement();
+			entity.physics();
+			for (Object object : objects) {
 				if (entity.getBounds().intersects(object.getBounds())) {
 					entity.collide(object.getBounds());
 				}
 			}
 		}
+	}
+	
+	public void visual() {
+		for (Object object : objects) {
+		}
+		for (Entity entity : entities) {
+			entity.visual();
+		}	
 	}
 
 	public Object[] getObjects() {

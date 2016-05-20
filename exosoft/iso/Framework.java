@@ -73,6 +73,7 @@ public class Framework {
 			
 			public void actionPerformed(ActionEvent e) {
 				calculateFramerate();
+				gameWorld.visual();
 				sheet.repaint();
 			}
 			

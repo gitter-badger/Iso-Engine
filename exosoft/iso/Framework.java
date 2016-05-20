@@ -6,18 +6,19 @@ import javax.swing.Timer;
 public class Framework {
 	protected static Environment gameWorld;
 	protected static Character player;
+	protected static Window window;
 	protected static JPanel sheet;
+	protected static JPanel console;
+	protected static JTextField consoleInput;
 	protected static KeyObserver keywatch;
 	protected static int gameFrequency;
 	protected static int drawRate;
 	protected static int metafrequency;
+	protected static boolean drawFPS;
+	protected static double framerate;
 	protected static volatile Timer visualHandler;
 	protected static volatile Timer gameHandler;
 	protected static volatile Timer metaHandler;
-	protected static JTextField consoleInput;
-	protected static JPanel console;
-	protected static Window window;
-	protected static JPanel sheet;
 	
 	protected void initiateGame() {
 		metaFrequency = 120;
@@ -38,6 +39,7 @@ public class Framework {
 				Graphics2D g = (Graphics2D) g1;
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g = gameWorld.drawWorld(g);
+				g.drawString(10, 10, framerate);
 			}
 		});
 		sheet.setLayout(new CardLayout());

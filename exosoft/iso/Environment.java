@@ -74,7 +74,7 @@ public class Environment {
 			}
 		}
 		for (Entity entity : entities) {
-			g.drawImage(entity.getSprite(entity.getSpriteNum()), entity.getIntX(), entity.getIntY(), null);
+			g.drawImage(entity.activeSprite, entity.getIntX(), entity.getIntY(), null);
 			if (devmode) {
 				g.setColor(Color.red);
 				g.draw(entity.getBounds());

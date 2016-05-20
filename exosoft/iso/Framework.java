@@ -162,6 +162,14 @@ public class Framework {
 					System.err.println("Invalid modifier. Valid modifiers: {on, off, toggle}");
 					break;
 				}
+				break;
+			case "drawrate":
+			    if (Integer.parseInt(splitData[1]) > 0) {
+			        drawRate = Integer.parseInt(splitData[1]);
+			    } else if (Integer.parseInt(splitData[1] <= 0) {
+			        System.err.println("Please provide an integer greater than 0");
+			    }
+			    break;
 			default:
 				System.err.println("Command unrecognized");
 				break;

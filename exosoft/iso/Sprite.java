@@ -10,7 +10,8 @@ public abstract class Sprite {
 	private BufferedImage[] sprites;
 	public int spriteWidth = 0;
 	public int spriteHeight = 0;
-	private int spriteNum;
+	protected int spriteNum;
+    public BufferedImage activeSprite;
 
 	public enum SheetType {
 		SINGLE, HORIZONTAL, VERTICAL, RECTANGULAR

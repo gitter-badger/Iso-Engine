@@ -20,12 +20,70 @@ public class Framework {
 	protected static volatile Timer gameHandler;
 	protected static volatile Timer metaHandler;
 	
-	protected void initiateGame() {
+	protected static void initiateGame() {
 		metaFrequency = 120;
 		gameFrequency = 120;
 		drawRate = 60;
 		keywatch = new KeyObserver();
 		gameWorld = new Environment();
+	}
+	
+	protected static void initiateThreads() {
+		metaHandler = new Timer(1000 / 120, new ActionListener() {
+			boolean consoleActive = true;
+			boolean pauseActionAvailable = true;
+			boolean consoleActionAvailable = true;
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				detectPauseAction();
+				if (consoleActive) {
+					detectConsoleAction();
+				}
+			}
+
+			private synchronized void detectConsoleAction() {
+				if (keywatch.getKey(KeyEvent.VK_BACK_QUOTE) && consoleActionAvailable) {
+					consoleInput.setVisible(!consoleInput.isVisible());
+					consoleInput.requestFocusInWindow();
+				}
+				consoleActionAvailable = !keywatch.getKey(KeyEvent.VK_BACK_QUOTE);
+			}
+
+			private synchronized void detectPauseAction() {
+				if (keywatch.getKey(KeyEvent.VK_ESCAPE) && pauseActionAvailable) {
+					if (gameHandler.isRunning()) {
+						gameHandler.stop();
+					} else {
+						gameHandler.start();
+					}
+				}
+				pauseActionAvailable = !keywatch.getKey(KeyEvent.VK_ESCAPE);
+			}
+		});
+		
+		gameHandler = new Timer(1000 / gameFrequency, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				player.movement();
+				player.physics();
+				gameWorld.execute();
+			}
+		});
+		
+		visualHandler = new Timer(1000 / drawRate, new ActionListener() {
+			long logTime = system.nanoTime();
+			
+			public void actionPerformed(ActionEvent e) {
+				calculateFramerate();
+				player.visual();
+				sheet.repaint();
+			}
+			
+			private void calculateFramerate(long currentTime) {
+				framerate = (System.nanoTime() - logTime).doubleValue() * 1000;
+				logTime = System.nanoTime();
+			} 
+		});
 	}
 	
 	protected void initiateWindow() {

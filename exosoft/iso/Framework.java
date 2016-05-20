@@ -19,7 +19,7 @@ public class Framework {
 	protected static Window window;
 	protected static JPanel sheet;
 	
-	protected void InitiateGame() {
+	protected void initiateGame() {
 		metaFrequency = 120;
 		gameFrequency = 120;
 		drawRate = 60;
@@ -27,7 +27,7 @@ public class Framework {
 		gameWorld = new Environment();
 	}
 	
-	protected void InitiateWindow() {
+	protected void initiateWindow() {
 		window = new Window("Zerfall", 1280, 720);
 		window.setFocusable(true);
 		window.addKeyListener(keywatch = new KeyObserver());
@@ -43,5 +43,23 @@ public class Framework {
 		sheet.setLayout(new CardLayout());
 		sheet.setSize(1280, 720);
 		sheet.setVisible(true);
+	}
+	
+	protected void initiateConsole() {
+		sheet.add(console = new JPanel());
+		console.setLayout(new GridBagLayout());
+		console.setOpaque(false);
+		console.add(consoleInput = new JTextField(50));
+		consoleInput.setHorizontalAlignment(JTextField.LEFT);
+		consoleInput.setVisible(false);
+		consoleInput.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (consoleInput.getText() != null) {
+					readConsoleInput(consoleInput.getText());
+					consoleInput.setText("");
+				}
+			}
+		});
 	}
 }

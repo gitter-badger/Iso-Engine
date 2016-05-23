@@ -1,9 +1,10 @@
 package exosoft.iso;
 
+import java.awt.AlphaComposite;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,8 +39,8 @@ public class Framework {
 	private static DecimalFormat framerateFormat;
 
 	protected static void initiateGame() {
-		metaFrequency = 120;
-		gameFrequency = 120;
+		metaFrequency = 30;
+		gameFrequency = 60;
 		drawRate = 60;
 		keywatch = new KeyObserver();
 		gameWorld = new Environment();
@@ -48,26 +49,11 @@ public class Framework {
 	protected static void initiateThreads() {
 		framerateFormat = new DecimalFormat("#.00");
 		metaHandler = new Timer(1000 / metaFrequency, new ActionListener() {
-			boolean consoleActive = true;
 			boolean pauseActionAvailable = true;
-			boolean consoleActionAvailable = true;
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				detectPauseAction();
-				if (consoleActive) {
-					detectConsoleAction();
-				}
-			}
-
-			private synchronized void detectConsoleAction() {
-				if (keywatch.getKey(KeyEvent.VK_BACK_QUOTE) && consoleActionAvailable) {
-					console.setVisible(true);
-					consoleInput.setVisible(!consoleInput.isVisible());
-					console.requestFocusInWindow();
-					consoleInput.requestFocusInWindow();
-				}
-				consoleActionAvailable = !keywatch.getKey(KeyEvent.VK_BACK_QUOTE);
 			}
 
 			private synchronized void detectPauseAction() {
@@ -120,23 +106,22 @@ public class Framework {
 				Graphics2D g = (Graphics2D) g1;
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g = gameWorld.drawWorld(g);
-				g.drawString(framerateFormat.format(framerate), 10, 10);
+				if (drawFPS) {
+					g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
+					g.drawString(framerateFormat.format(framerate), 10, 10);
+				}
 			}
 		});
 		sheet.setLayout(new CardLayout());
 		sheet.setSize(1280, 720);
-		sheet.setVisible(true);
+		sheet.requestFocus();
 	}
 
 	protected static void initiateConsole() {
 		sheet.add(console = new JPanel());
-		console.setRequestFocusEnabled(true);
-		console.setLayout(new GridBagLayout());
 		console.setOpaque(false);
-		console.setVisible(true);
+
 		console.add(consoleInput = new JTextField(50));
-		consoleInput.setHorizontalAlignment(JTextField.LEFT);
-		consoleInput.setVisible(false);
 		consoleInput.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -146,32 +131,57 @@ public class Framework {
 				}
 			}
 		});
+		sheet.getInputMap().put(KeyStroke.getKeyStroke('`'), "openConsole");
+		sheet.getActionMap().put("openConsole", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				consoleInput.setVisible(true);
+				consoleInput.requestFocusInWindow();
+				keywatch.clearKeys();
+			}
+		});
+
 		consoleInput.getInputMap().put(KeyStroke.getKeyStroke('`'), "exitConsole");
-		@SuppressWarnings("serial")
 		Action exitConsole = new AbstractAction() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				consoleInput.setText("");
 				consoleInput.setVisible(false);
-				consoleInput.transferFocus();
-				console.transferFocus();
+				sheet.requestFocusInWindow();
 			}
 
 		};
 		consoleInput.getActionMap().put("exitConsole", exitConsole);
 		console.revalidate();
 		sheet.revalidate();
-		console.repaint();
-		sheet.repaint();
 	}
 
-	private static void readConsoleInput(String data) {
-		String[] splitData = data.split(" ");
+	public static void finalizeWindow() {
+		window.setVisible(true);
+		sheet.setVisible(true);
+		console.setVisible(true);
+		consoleInput.setVisible(false);
+		window.requestFocus();
+	}
+
+	/**
+	 * Reads input from the console, and alters variables during runtime based
+	 * on the input. In the future, developers will be able to add their own
+	 * cases to the switch.
+	 * 
+	 * @author GingerDeadshot
+	 * @param data
+	 */
+	private static void readConsoleInput(String consoleInput) {
+		String[] splitData = consoleInput.split(" ");
+		String command;
+		String modifier;
 		if (splitData.length == 2) {
-			switch (splitData[0]) {
+			command = splitData[0];
+			modifier = splitData[1];
+			switch (command) {
 			case "devmode":
-				switch (splitData[1]) {
+				switch (modifier) {
 				case "on":
 					gameWorld.setDevmode(true);
 					System.out.println("devmode on");
@@ -189,7 +199,7 @@ public class Framework {
 				}
 				break;
 			case "drawfps":
-				switch (splitData[1]) {
+				switch (modifier) {
 				case "on":
 					drawFPS = true;
 					System.out.println("drawfps on");
@@ -208,16 +218,16 @@ public class Framework {
 				}
 				break;
 			case "drawrate":
-				if (Integer.parseInt(splitData[1]) > 0) {
-					drawRate = Integer.parseInt(splitData[1]);
+				if (Integer.parseInt(modifier) > 0) {
+					drawRate = Integer.parseInt(modifier);
 					visualHandler.setDelay(1000 / drawRate);
-					System.out.println("drawrate set to ".concat(Integer.toString(drawRate)));
-				} else if (Integer.parseInt(splitData[1]) <= 0) {
+					System.out.println("drawrate set to ".concat(modifier));
+				} else {
 					System.err.println("Please provide an integer greater than 0");
 				}
 				break;
 			case "antialias":
-				switch(splitData[1]) {
+				switch (splitData[1]) {
 				case "on":
 					gameWorld.setAntialiasmode(true);
 					System.out.println("antialias on");
@@ -233,6 +243,14 @@ public class Framework {
 				default:
 					System.err.println("Invalid modifier. Valid modifiers: {on, off, toggle}");
 					break;
+				}
+				break;
+			case "gravity":
+				if (Double.parseDouble(splitData[1]) > 0) {
+					gameWorld.setGravity(Double.parseDouble(splitData[1]));
+					System.out.println("gravity set to ".concat(splitData[1]));
+				} else if (Double.parseDouble(splitData[1]) <= 0) {
+					System.err.println("Please provide a decimal greater than 0");
 				}
 				break;
 			default:

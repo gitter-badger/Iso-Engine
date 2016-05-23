@@ -29,5 +29,11 @@ public class KeyObserver implements KeyListener {
 	public void setKey(int index, boolean status) {
 		keyStatus[index] = status;
 	}
+	
+	public void clearKeys() {
+		for (int i = 0; i < keyStatus.length; i++) {
+			setKey(i, false);
+		}
+	}
 
 }

@@ -15,6 +15,7 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 	public double velocity;
 	protected double gravity;
 	protected Rectangle2D bounds;
+	protected boolean hitCeiling;
 
 	// Declares a new Entity
 	public Entity(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
@@ -25,6 +26,7 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 	// Compensates for collision
 	public synchronized void collide(Rectangle2D intersect) {
 		atRest = false;
+		hitCeiling = false;
 		double x = getX();
 		double y = getY() + velocity;
 		Rectangle2D newBounds = getBounds();
@@ -32,26 +34,29 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		while (!intersect.isEmpty() && (intersect.getHeight() >= 1 || intersect.getWidth() >= 1)) {
 			if (intersect.getHeight() > intersect.getWidth()) {
 				if (intersect.getCenterX() < newBounds.getCenterX()) {
-					x += 0.001;
+					x += 0.01;
 				} else if (intersect.getCenterX() > newBounds.getCenterX()) {
-					x -= 0.001;
+					x -= 0.01;
 				}
 			}
 			if (intersect.getWidth() > intersect.getHeight()) {
 				if (intersect.getCenterY() < newBounds.getCenterY()) {
-					y += 0.001;
+					y += 0.01;
 				} else if (intersect.getCenterY() > newBounds.getCenterY()) {
-					y -= 0.001;
+					y -= 0.01;
 				}
 			}
 			if (intersect.getMaxY() == newBounds.getMaxY() && intersect.getWidth() >= 5) {
 				atRest = true;
 			}
+			if (intersect.getMinY() == newBounds.getMinY() && intersect.getWidth() >= 5) {
+				hitCeiling = true;
+			}
 			newBounds.setRect(x, y, spriteWidth, spriteHeight);
 			intersect = intersect.createIntersection(newBounds);
 		}
 		setLocation(x, y);
-		if (atRest) {
+		if (atRest || hitCeiling) {
 			if (velocity > 8) {
 				setVelocity(-velocity / 2);
 			} else {
@@ -60,7 +65,7 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 		}
 		bounds.setRect(x, y, spriteWidth, spriteHeight);
 	}
-	
+
 	public void collide2D(Object o) {
 		Line2D[] sides = new Line2D[o.npoints];
 		int[] xpoints = o.xpoints;

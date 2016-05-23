@@ -15,7 +15,7 @@ import java.util.List;
 public class Environment {
 	List<Object> objects = new ArrayList<Object>();
 	List<Entity> entities = new ArrayList<Entity>();
-	public double gravity = 0.2;
+	private double gravity = 0.3;
 	private boolean devmode;
 	private boolean antialiasmode;
 
@@ -44,13 +44,11 @@ public class Environment {
 			}
 		}
 	}
-	
+
 	public void visual() {
-		for (Object object : objects) {
-		}
 		for (Entity entity : entities) {
 			entity.visual();
-		}	
+		}
 	}
 
 	public Object[] getObjects() {
@@ -108,6 +106,17 @@ public class Environment {
 		this.antialiasmode = antialiasmode;
 		for (Object object : objects) {
 			object.setAntialiasmode(antialiasmode);
+		}
+	}
+
+	public double getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(double gravity) {
+		this.gravity = gravity;
+		for (Entity e : entities) {
+			e.gravity = gravity;
 		}
 	}
 }

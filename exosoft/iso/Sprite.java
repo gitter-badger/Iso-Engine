@@ -11,7 +11,7 @@ public abstract class Sprite {
 	public int spriteWidth = 0;
 	public int spriteHeight = 0;
 	protected int spriteNum;
-    public BufferedImage activeSprite;
+	public BufferedImage activeSprite;
 
 	public enum SheetType {
 		SINGLE, HORIZONTAL, VERTICAL, RECTANGULAR

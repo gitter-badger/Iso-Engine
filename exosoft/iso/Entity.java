@@ -1,7 +1,8 @@
 package exosoft.iso;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+
+import princeton.calc.Vector;
 
 /**
  * Abstract class based off of the Sprite class. For in-game entities that have
@@ -21,6 +22,24 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 	public Entity(SheetType type, String sheetPath, int spriteWidth, int spriteHeight) {
 		super(type, sheetPath, spriteWidth, spriteHeight);
 		bounds = new Rectangle2D.Double(getX(), getY(), spriteWidth, spriteHeight);
+	}
+
+	public synchronized void collide2D(Object object) {
+		Vector[] axes = new Vector[object.npoints];
+		// loop over the vertices
+		for (int i = 0; i < object.npoints; i++) {
+			// get the current vertex
+			Vector p1 = new Vector(object.xpoints[i], object.ypoints[i]);
+			// get the next vertex
+			Vector p2 = new Vector(object.xpoints[i + 1 == object.npoints ? 0 : i + 1],
+					object.ypoints[i + 1 == object.npoints ? 0 : i + 1]);
+			// subtract the two to get the edge vector
+			Vector edge = p1.minus(p2);
+			// get either perpendicular vector
+			Vector normal = edge.getNormal();
+			// the perp method is just (x, y) => (-y, x) or (y, -x)
+			axes[i] = normal;
+		}
 	}
 
 	// Compensates for collision
@@ -64,16 +83,6 @@ public abstract class Entity extends Sprite implements ObjectPhysics {
 			}
 		}
 		bounds.setRect(x, y, spriteWidth, spriteHeight);
-	}
-
-	public void collide2D(Object o) {
-		Line2D[] sides = new Line2D[o.npoints];
-		int[] xpoints = o.xpoints;
-		int[] ypoints = o.ypoints;
-		for (int i = 0; i < sides.length - 1; i++) {
-			sides[i].setLine(xpoints[i], xpoints[i + 1], xpoints[i + 1], ypoints[i]);
-		}
-		sides[sides.length - 1].setLine(xpoints[sides.length - 1], ypoints[0], xpoints[0], ypoints[sides.length - 1]);
 	}
 
 	// Inherited function that runs the physics of the environment

@@ -1,6 +1,5 @@
 package exosoft.iso;
 
-import java.awt.AlphaComposite;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -94,12 +93,16 @@ public class Framework {
 		visualHandler.start();
 	}
 
-	@SuppressWarnings("serial")
 	protected static void initiateWindow() {
 		window = new Window("Zerfall", 1280, 720);
 		window.setFocusable(true);
 		window.addKeyListener(keywatch = new KeyObserver());
 		window.add(sheet = new JPanel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 7840979712281271537L;
+
 			@Override
 			public void paintComponent(Graphics g1) {
 				super.paintComponent(g1);
@@ -133,6 +136,11 @@ public class Framework {
 		});
 		sheet.getInputMap().put(KeyStroke.getKeyStroke('`'), "openConsole");
 		sheet.getActionMap().put("openConsole", new AbstractAction() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5717123701261130979L;
+
 			public void actionPerformed(ActionEvent e) {
 				consoleInput.setVisible(true);
 				consoleInput.requestFocusInWindow();
@@ -142,6 +150,11 @@ public class Framework {
 
 		consoleInput.getInputMap().put(KeyStroke.getKeyStroke('`'), "exitConsole");
 		Action exitConsole = new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -2212449898139510841L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

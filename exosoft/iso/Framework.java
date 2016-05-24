@@ -107,7 +107,7 @@ public class Framework {
 			public void paintComponent(Graphics g1) {
 				super.paintComponent(g1);
 				Graphics2D g = (Graphics2D) g1;
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 				g = gameWorld.drawWorld(g);
 				if (drawFPS) {
 					g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));

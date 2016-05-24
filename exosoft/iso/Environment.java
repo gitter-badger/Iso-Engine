@@ -62,6 +62,7 @@ public class Environment {
 	}
 
 	public Graphics2D drawWorld(Graphics2D g) {
+		g.scale(0.5, 0.5);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		for (Object object : objects) {
 			g.drawImage(object.getTexturedObject(), object.getBounds().x, object.getBounds().y, null);
@@ -77,6 +78,7 @@ public class Environment {
 				g.draw(entity.getBounds());
 			}
 		}
+		g.scale(2, 2);
 		return g;
 	}
 
